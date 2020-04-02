@@ -1,0 +1,109 @@
+{% load fontawesome %}
+{% load static %}
+{% block navBar %}
+
+<nav class="navbar navbar-light bs-dark navbar-expand-xl navbarMenu dropdown-toggle1">
+    <div class="container-fluid">
+        <button class="navbar-toggler navbar-btn" type="button" data-toggle="collapse" data-target="#navbarsActuel" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="{% url 'bienvenue' %}"><img  src="{% static 'favicon.ico' %}" width="30" height="30" alt="acceuil"/></a>
+        <div class="navbar-collapse collapse justify-content-between  align-items-center w-100"  id="navbarsActuel">
+
+{% if user.is_authenticated %}
+    <ul class="nav navbar-nav  d-flex justify-content-between  w-100">
+      <li class="nav-item dropdown nav2">
+           <a data-toggle="dropdown" class="nav-link dropdown-toggle navbar-menu  " href="dropdownForum" aria-haspopup="true" aria-expanded="false" >
+               {% fontawesome_icon 'book-reader' %} Forum </a>
+
+            <ul class="dropdown-menu dropdown-menu1 textcenter nav2-dropdown" id="dropdownForum">
+                <li> <a class="dropdown-item" href="{% url 'blog:index' %}?"> {% fontawesome_icon 'book' %} Articles</a></li>
+                <li class="divider" role="separator"></li>
+                <li><a class="dropdown-item" href="{% url 'agora_general' %}"> {% fontawesome_icon 'comments' %} Salon de discussion</a></li>
+                <li class="divider" role="separator"></li>
+                 <li><a class="dropdown-item" href="{% url 'conversations' %}">{% fontawesome_icon 'comment' %}  Conversations privées</a></li>
+            </ul>
+      </li>
+
+
+   {% if request.user.is_superuser %}
+        {% load admin_urls %}
+        <li class="nav-item nav2"><a class="nav-link" href="{% url 'admin:index' %}">admin</a></li>
+        {% endif %}
+ <li class="nav-item nav2 "><a class="nav-link" href="{% url 'cal:agenda' %}">{% fontawesome_icon 'calendar' %}  Agenda</a></li>
+
+      <li class="nav-item nav2"><a class="nav-link" href="{% url 'notifications_news' %}">{% fontawesome_icon 'bell' %}  Notifications</a></li>
+
+        <li class="nav-item dropdown nav2">
+            <a class="nav-link dropdown-toggle navbar-menu" href="dropdoownSite" id="navbarAbout2" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false" >
+             {% fontawesome_icon 'globe' %} Site
+            </a>
+            <ul class="dropdown-menu dropdown-menu1 textcenter nav2-dropdown" aria-labelledby="navbarAbout2" id="dropdoownSite">
+
+               <li> <a class="dropdown-item" href="http://www.uppm66.org/" target="_blank"> Site de l'UPPM </a></li>
+                   <li class="divider" role="separator"></li>
+               <li> <a class="dropdown-item" href="{% url 'annuaire' %}"> Annuaire </a></li>
+               <li> <a class="dropdown-item" href="{% url 'faq' %}"> FAQ </a></li>
+               <li> <a class="dropdown-item" href="{% url 'cgu' %}"> CGU </a></li>
+                   <li class="divider" role="separator"></li>
+               <li> <a class="dropdown-item" href="{% url 'contact_admins' %}"> Contacter admins </a></li>
+
+            </ul>
+        </li>
+        <li class="nav-item dropdown nav2">
+           <a data-toggle="dropdown" class="nav-link dropdown-toggle  navbar-menu" href="{% url 'profil_courant' %}" aria-haspopup="true" aria-expanded="false"  >
+              {% fontawesome_icon 'user' %} Profil: {{request.user}} </a>
+            <ul class="dropdown-menu dropdown-menu1 textcenter nav2-dropdown" aria-labelledby="navbarDropdownMenuLink">
+               <li> <a class="dropdown-item" href="{% url 'profil_courant' %}">Mon profil</a></li>
+                <li class="divider" role="separator"></li>
+                 <li><a class="dropdown-item" href="{% url 'conversations' %}">Mes conversations</a></li>
+                <li class="divider" role="separator"></li>
+               <li> <a class="dropdown-item" href="{% url 'logout' %}">Se déconnecter</a></li>
+            </ul>
+        </li>
+    </ul>
+{% else %}
+
+    <ul class="nav navbar-nav mr-auto navbar-left">
+
+        <li class="nav-item dropdown nav2">
+            <a class="nav-link dropdown-toggle navbar-menu" href="{% url 'profil_courant' %}" id="navbarAbout" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              A propos
+            </a>
+            <ul class="dropdown-menu dropdown-menu1 textcenter nav2-dropdown" aria-labelledby="navbarAbout">
+               <li> <a class="dropdown-item" href="https://www.uppm66.org/" target="_blank" > Site de l'UPPM</a></li>
+                    <li class="divider" role="separator"></li>
+               <li> <a class="dropdown-item" href="{% url 'contact_admins' %}"> Nous contacter</a></li>
+                    <li class="divider" role="separator"></li>
+               <li> <a class="dropdown-item" href="{% url 'cgu' %}"> CGU </a></li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="nav navbar-nav ">
+        <li class="nav-item nav4 "><a class="nav-link" href="{% url 'login' %}"> {% fontawesome_icon 'user' %} Se connecter</a></li>
+        <li class="nav-item nav5 "><a class="nav-link" href="{% url 'senregistrer' %}"> {% fontawesome_icon 'address-card' %} S'inscrire</a></li>
+
+    </ul>
+{% endif %}
+</div>
+    </div>
+</nav>
+<script>
+$('.dropdown-menu a.dropdown-toggle').on('click', function(e) {
+  if (!$(this).next().hasClass('show')) {
+    $(this).parents('.dropdown-menu').first().find('.show').removeClass('show');
+  }
+  var $subMenu = $(this).next('.dropdown-menu');
+  $subMenu.toggleClass('show');
+
+
+  $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
+    $('.dropdown-submenu .show').removeClass('show');
+  });
+
+
+  return false;
+});
+</script>
+{% endblock %}
+

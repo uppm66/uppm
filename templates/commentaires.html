@@ -1,0 +1,49 @@
+
+{% load blog_filters %}
+<div class="contenu commentaires" id="idConversation">
+{% for comment in commentaires %}
+    <div class="row {% if comment.auteur.id == request.user.id %} msg-auteur  {%else%} msg-destinataire{%endif%}">
+
+        <div class="col-sm-3 col-md-3 col-lg-2">
+            <p class="infos  textepetit">{% ifchanged %}<a href="{% url 'profil_nom' comment.auteur_comm %}">{{comment.auteur_comm}}</a>, {% endifchanged %}{{ comment.date_creation|date:"d/m/Y, G:i" }}
+
+                {% if request.user == comment.auteur_comm or request.user.is_superuser %}
+                <a class="boutonediter" href="{{ comment.get_edit_url  }}" role="button" help_text="éditer"><i class="fa fa-edit"></i></a>
+                {% endif %}
+</p>
+
+            </div>
+        <div class=" col-sm-9 col-md-9 col-lg-10 message ">
+                <p>{{ comment.commentaire|safe}}</p>
+        </div>
+    </div>
+{% endfor %}
+</div>
+    <script>
+    var messageBody = document.querySelector('#idConversation');
+    messageBody.scrollTop = idConversation.scrollHeight - idConversation.clientHeight;
+</script>
+
+<hr>
+
+{%if not request.user.is_anonymous %}
+{% if commentaires %}
+<h5>Répondre :</h5>
+{%else%}
+<h5>Laisser un avis :</h5>
+{%endif%}
+<form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="Nouveau Message" value="{{ message_defaut }}">
+    {% include 'form_template3.html' %}
+
+</form>
+ {% else %}
+<p><small>Vous devez vous <a href="/auth/login/">authentifier</a> pour laisser un commentaire.</small></p>
+ {% endif %}
+
+</div>
+
+    <script>
+    getElementById("id_commentaire_iframe").height = "150px"
+</script>

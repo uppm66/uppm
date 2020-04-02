@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block subtitle %}
+    <h4>Message envoyé !</h4>
+<div class="row">
+<div class="col-sm-12">
+<p>De : {{ envoyeur }}</p>
+    {% if destinataire %}
+<p>à : {{ destinataire }}</p>
+    {% endif %}
+    {% if destinataires %}
+<p>à : {% for d in destinataires %}{{ d }}, {% endfor %}</p>
+    {% endif %}
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+    <p>Sujet : </p>
+    <p>{{ sujet }}</p>
+<p>Message : </p
+><p>{{ msg |safe }}</p>
+</div>
+</div>
+{% endblock %}

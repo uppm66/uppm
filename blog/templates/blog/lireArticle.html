@@ -1,0 +1,166 @@
+{% extends 'blog/baseBlog.html' %}
+{% load activity_tags %}
+{% load blog_filters %}
+{% load fontawesome %}
+
+
+{% block subtitle %}
+{% comment %}
+
+    <div class="row">
+
+        <div class="mobile-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <nav class="nav2">
+            <ul>
+                <li><a href="#sec01">Section 01</a></li>
+                <li><a href="#sec02">Section 02</a></li>
+                <li><a href="#sec03">Section 03</a></li>
+                <li><a href=".sec04">Section 04</a></li>
+            </ul>
+        </nav>
+
+    </div> <!-- / row -->
+
+{% endcomment %}
+<div class="row">
+    <div class="col-md-2 " id="sec02">
+        <p>
+        <a  href="{% url 'blog:index'  %}">
+        <button class="btn btn-info btn-sm textright" ><i class="fa fa-arrow-left"></i> Sommaire</button>
+            </a>
+        </p>
+    </div>
+    <div class="col-md-8">
+        <p class="infos  textepetit">Dans: <a href="{% url 'blog:index'  %}?categorie={{article.categorie}}"  style="background-color:{{article.get_couleur}}">{{ article.get_categorie_display }}</a>, rédigé par <a href="{% url 'profil' article.auteur.id %}"> {{ article.auteur.username }}</a>, le {{ article.date_creation|date:"DATE_FORMAT" }};
+
+        <a href="{% url 'blog:suivre_article' article.slug %}">
+            {% if request.user|is_following:article %}
+            <button type="button" class="btn btn-light btn-sm" data-toggle="tooltip" data-placement="bottom" title=" Cliquez pour arreter de recevoir des notifications concernant cet article par mail">
+                 {% fontawesome_icon 'bell' %} Suivi
+            </button>
+            {% else %}
+            <button type="button" class="btn btn-secondary btn-sm" data-toggle="tooltip" data-placement="bottom" title=" Cliquez pour recevoir les notifications concernant cet article par mail">
+                 {% fontawesome_icon 'bell-slash' %} Non suivi
+            </button>
+            {% endif %}
+        </a>
+            {%comment %}
+        <a href="{% url 'blog:suiveursArticle' article.slug %}">
+            <button type="button" class="btn btn-secondary btn-sm" data-toggle="tooltip" data-placement="bottom" title=" Cliquez pour recevoir les notifications concernant cet article par mail">
+                 {% fontawesome_icon 'eye' %}
+            </button>
+        </a>
+            {% endcomment %}
+        </p>
+    </div>
+    <div class="col-md-2">
+        <p>
+        {%if article.auteur == request.user %}
+		<div class="btn-group">
+            <a href="{% url 'blog:modifierArticle' slug=article.slug %}">
+               <button type="button" class="btn btn-sm btn-warning">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp;Modifier
+               </button></a>
+            <a href="{% url 'blog:supprimerArticle' slug=article.slug %}">
+               <button type="button" class="btn btn-sm btn-danger">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp;Supprimer
+               </button></a>
+        </div>
+        {%elif article.estModifiable%}
+            <a href="{% url 'blog:modifierArticle' slug=article.slug %}">
+               <button type="button" class="btn btn-sm btn-warning">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp;Modifier
+               </button></a>
+        {%endif%}
+
+    </p>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block content %}
+<div class="contenu article ">
+<div class="row"  id="sec03">
+<div class="col-sm-6 textleft" >
+
+            <span class="badge {% if article.estPublic%}badge-warning{%else%} badge-success {%endif%}">
+                Article {%if article.estPublic%} Public {%else%}  Collectif ACVI  {%endif%}
+            </span>
+            {% if article.estArchive%}
+            <span class="badge badge-secondary">
+                archivé
+            </span>
+            {%endif%}
+    </div>
+
+    <div class="col-sm-6 textright" >
+        {%if article.start_time%}
+        <p>
+          <a href="{% url 'cal:agenda' %} ">
+            {%if article.end_time and article.start_time != article.end_time %}
+                Du {{ article.start_time|date:"d/m/Y"  }} au {{ article.end_time|date:"d/m/Y"  }}
+                {%else%}
+                le {{ article.start_time|date:"d/m/Y"  }}
+
+            {% endif %}
+              </a>
+          </p>
+        {% endif %}
+        {%if dates or article.auteur == request.user or article.estPublic %}
+        <p>
+
+            <button type="button" class="btn" data-toggle="modal" data-target="#dates">
+             Dates {%if article.start_time %}supplémentaires{%endif%}
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="dates" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog textcenter" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                      Dates
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      {%for date in dates %}
+                     <p>{{date.start_time |date:"l d F Y"}}</p>
+                      {%empty%}
+                      -
+                      {%endfor%}
+                    {%if article.auteur == request.user or article.estPublic %}
+                      <p><a class="btn btn-success" href="{% url 'blog:ajouterEvenementArticle' id=article.id %}" >Ajouter une date</a></p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </p>
+  {% endif %}
+    </div>
+</div>
+
+<div class="row">
+<div class="col">
+      <h3 style="text-indent: 30px;"> {{ article.titre }}</h3>
+</div>
+</div>
+<div class="row">
+<div class="col">
+   {{ article.contenu |safe}}
+</div>
+</div>
+</div>
+
+
+<hr>
+
+{% include 'commentaires.html' %}
+
+{% endblock %}

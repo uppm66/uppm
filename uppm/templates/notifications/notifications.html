@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load activity_tags %}
+{% block subtitle %}
+<h4 class = "textcenter "> Notifications par type </h4>
+
+
+<p class = "textcenter ">
+      <a href="{% url 'notifications_news'  %}" class="btn btn-success">
+         Notifications récentes
+      </a>
+</p>
+{% endblock %}
+{% block content %}
+<div class="row justify-content-center"
+<div class="card-deck notif justify-content-between">
+<div class="card carte-notif notif2  d-md-flex textcenter">
+    <div class="card-header textcenter" style="background-color:#f0a868">
+      Articles
+    </div>
+    <ul class="list-group list-group-flush">
+  {% for action in articles %}
+      {% include "notifications/notifications_template.html" with action=action %}
+  {% endfor %}
+    </ul>
+  </div>
+  <div class="card carte-notif notif2  d-md-flex textcenter ">
+    <div class="card-header textcenter justify-content-center" style="background-color:#8eaf9d">
+      Salon{% if request.user.is_membre_collectif %}s{%endif %}
+    </div>
+      <div class="card-block"  >
+        <ul class="list-group list-group-flush">
+          {% for action in salons%}
+              {% include "notifications/notifications_template.html" with action=action %}
+          {% endfor %}
+        </ul>
+      </div>
+  </div>
+
+
+  <div class="card carte-notif notif2  d-md-flex textcenter">
+    <div class="card-header textcenter" style="background-color:#cacaaa" >
+     Mes conversations
+    </div>
+    <ul class="list-group list-group-flush " >
+  {% for action in conversations|slice:":20" %}
+      {% include "notifications/notifications_template.html" with action=action %}
+  {% endfor %}
+    </ul>
+  </div>
+
+
+  <div class="card carte-notif notif2  d-md-flex textcenter">
+    <div class="card-header textcenter" style="background-color:#cacaaa" >
+     Inscriptions
+    </div>
+    <ul class="list-group list-group-flush " >
+  {% for action in inscriptions|slice:":20" %}
+      {% include "notifications/notifications_template.html" with action=action %}
+  {% endfor %}
+    </ul>
+  </div>
+
+
+<div class="card carte-notif notif2  d-md-flex textcenter">
+  <div class="card-header textcenter" style="background-color:#b5ca8d" >
+    Mes actions
+  </div>
+  <ul class="list-group list-group-flush " >
+{% activity_stream 'actor' user %}
+{% for action in stream|slice:":20" %}
+    {% include "notifications/notifications_template.html" with action=action %}
+{% endfor %}
+  </ul>
+</div>
+</div>
+
+{% endblock %}

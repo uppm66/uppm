@@ -1,0 +1,34 @@
+{% extends 'blog/baseBlog.html' %}
+{% block subtitle %}
+
+<div class="row">
+    <div class="col textcenter">
+       <h3> Bienvenue sur le forum</h3>
+    </div>
+</div>
+
+{% endblock %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-12 textcenter">
+        <div class="btn-group btn-group-justified">
+        <a href="{% url 'agora_general' %}">
+         <button type="button" class="btn btn-success">
+                 Salon
+            </button></a>
+         <a href="{% url 'blog:index' %}">
+        <button type="button" class="btn btn-success" >
+               Articles
+            </button>
+            </a>
+         <a href="{% url 'blog:index_projets' %}">
+            <button type="button" class="btn btn-success" >
+               Projets
+            </button>
+            </a>
+    </div>
+   </div>
+
+{% endblock %}
+

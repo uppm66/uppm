@@ -1,0 +1,116 @@
+
+{% extends 'base.html' %}
+{% block headerDocument%}
+{% load leaflet_tags %}
+{% load static %}
+{%endblock%}
+{%block header %}
+{% leaflet_js %}
+{% leaflet_css %}
+{%endblock%}
+{% block title %}Profil de {{ user.username }} {% endblock %}
+{% block subtitle %}
+<div class="row">
+  <div class="col-md-12 textcenter">
+    <h4> Profil de {{ user.username }}    </h4>
+  </div>
+  </div>
+
+<div class="row">
+    <div class="col-md-12 textcenter">
+        {% if  user.username != request.user.username %}
+
+            <a href="{% url 'agora_conversation' user.username %}" class="btn btn-success">
+              <span class="glyphicon glyphicons-conversation"></span> Message
+            </a>
+            <a href="{% url 'profil_contact' user.id %}" class="btn btn-success">
+              <span class="glyphicon glyphicon-envelope"></span> Email
+            </a>
+        {%else%}
+            <a href="{% url 'conversations' %}" class="btn btn-success">
+              <span class="glyphicon glyphicon-shopping-cart"></span> Mes conversations
+            </a>
+
+        {%endif%}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-sm-12 col-md-10">
+      {%if request.user == user %}
+        <a href="{% url 'profil_modifier' %}">
+            <button type="button" class="btn btn-sm btn-warning">
+                <span class="glyphicon glyphicon-plus"></span>&nbsp;Modifier
+            </button>
+        </a>
+      {%endif%}
+      <table class="table table-condensed tablepanier table-striped"><tbody>
+
+        <tr>
+            <td style="width:250px">Pseudo :</td>
+            <td>{{ user.username }}</td>
+        </tr>
+
+        {%if user.accepter_annuaire  or request.user == user %}
+              {% if user.get_full_name %}
+                <tr>
+                    <td style="width:250px">Nom :</td>
+                    <td>{{ user.get_full_name }}</td>
+                </tr>
+              {% endif %}
+
+            <tr>
+                <td style="width:250px">Email :</td>
+                <td>{{ user.email }}</td>
+            </tr>
+
+         {%if user.telephone %}
+            <tr>
+                <td style="width:250px">Telephone :</td>
+                <td>{{ user.telephone }}</td>
+            </tr>
+            {% endif %}
+                    {%if user.commune %}
+            <tr>
+                <td style="width:250px">Commune :</td>
+                <td>{{ user.commune }}</td>
+            </tr>
+            {% endif %}
+            {%if user.code_postal %}
+            <tr>
+                <td style="width:250px">Code postal :</td>
+                <td>{{ user.code_postal }}</td>
+            </tr>
+            {% endif %}
+
+                  {% if user.site_web %}
+                    <tr>
+                        <td style="width:250px">Site_web *:</td>
+                        <td> {{ user.site_web }}</td>
+                    </tr>
+                  {% endif %}
+            {%if request.user.is_membre_collectif or request.user == user %}
+                  {% comment %}
+                    <tr>
+                        <td style="width:250px">Statut UPPM *:</td>
+                        <td>{{user.statutMembre_str}}</td>
+                    </tr>
+                  {% endcomment %}
+            {% endif %}
+        {% endif %}
+      </tbody>
+    </table>
+      </div>
+</div>
+<div class="row">
+
+
+      <small> {% if  request.user == user %}Les champs notés par un ^ ne sont visibles que par vous. {%endif%}Les champs notés par un * ne sont visibles que par les membres "permacat"</small>
+</div>
+
+{% endblock %}
+
+    

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load activity_tags %}
+{% load fontawesome %}
+{%block subtitle%}
+
+<div class="row align-items-center">
+<div class="col-md-12 textcenter">
+<h4>Mes conversations
+
+        <a href="{% url 'suivre_conversations' %}">
+            {% if request.user|is_following:conversations.0 %}
+            <button type="button" class="btn btn-light btn-sm" data-toggle="tooltip" data-placement="bottom" title=" Cliquez pour arreter de recevoir des notifications concernant cet article par mail">
+                 {% fontawesome_icon 'bell' %} Suivi
+            </button>
+            {% else %}
+            <button type="button" class="btn btn-secondary btn-sm" data-toggle="tooltip" data-placement="bottom" title=" Cliquez pour recevoir les notifications concernant cet article par mail">
+                 {% fontawesome_icon 'bell-slash' %} Non suivi
+            </button>
+            {% endif %}
+        </a>
+    </h4>
+</div>
+
+    </div>
+</div>
+
+<div class="row align-items-center">
+<div class="col-md-8 textcenter">
+        <a href="{% url 'chercher_conversation' %}">
+        <button type="button" class="btn btn-success" >
+              <i class="fa fa-arrow-right"></i> écrire à...
+            </button>
+            </a>
+</div></div>
+{%endblock%}
+{% block content %}
+
+<div class="card" >
+  <ul class="list-group list-group-flush">
+        {% for conversation in conversations %}
+            <li class="list-group-item">
+                <a href="{{conversation.get_absolute_url}}">
+                <p>{% if conversation.profil1 == request.user %}{{ conversation.auteur_2}}{%else%}{{ conversation.auteur_1}}{%endif%}, dernier message: {{conversation.date_dernierMessage|date:"l d F Y, G:i"}}{%if conversation.dernierMessage%} :  {{ conversation.dernierMessage|truncatechars:100}}{%endif%}</p>
+            </a>
+            </li>
+       {% cycle '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
+        {% endfor %}
+  </ul>
+</div>
+
+
+{% endblock %}

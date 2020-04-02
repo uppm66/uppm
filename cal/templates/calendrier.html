@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load app_filters %}
+
+                           {%block message%}
+{% endblock %}
+
+{% block subtitle %}
+
+<div class="row justify-content-center">
+    <div class="col-sm-12 textcenter">
+
+        <a class="btn btn-success " href="{% url 'blog:ajouterEvenement' %}">  <i class="fa fa-plus"></i> ajouter un évenement </a>
+
+    </div></div>
+
+{% endblock %}
+{% block content %}
+
+<div class="row moiscal">
+
+    <div class="col-sm-12 textcenter">
+
+        <a class="btn btn-light calleft btn-sm" href="{% url 'cal:agenda' %}?{{prev_month}}"> <i class="fa fa-arrow-left"></i> </a>
+
+        {{mois|translate_month}} {{annee}}
+
+        <a class="btn btn-light calright btn-sm" href="{% url 'cal:agenda' %}?{{next_month}}">  <i class="fa fa-arrow-right"></i> </a>
+
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-sm-12 textcenter">
+        {{ calendar }}
+    </div>
+</div>
+
+{% endblock %}

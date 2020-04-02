@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load fontawesome %}
+{%block header %}
+ <script src="{% static 'js/cookielaw.js'%}" type="text/javascript"></script>
+{%endblock%}
+{% block subtitle %}
+<div class="row">
+	<div class="col-md-12">
+		<h4 class = "textcenter rowbienvenue">{% trans "Bienvenue sur le forum" %}</h4>
+		<h5>  de l'Université Populaire Pyrénées Méditerranée </h5>
+	</div>
+</div>
+<hr>
+
+<div class="row">
+	<div class="col-sm-12">
+
+	 {% if not request.user.is_authenticated %}
+		<div class="row" >
+		  <div class="col-sm-12 textcenter">
+			   <b> <a href="{% url 'login' %}" class="btn btn-light btn-radius"><i class="fa fa-user"></i> Se connecter...</a>
+			  </b>
+		  </div>
+		</div>
+		<div class="row" >
+		  <div class="col-sm-12 textcenter">
+			  <b> <a href="{% url 'inscription_newsletter' %}" class="btn btn-light btn-radius"><i class="fa fa-envelope-o"></i> S'inscrire à la newsletter...</a>
+
+			  </b>
+		  </div>
+		</div>
+		<hr>
+
+	{%else%}
+		<div class="row" >
+		  <div class="col-sm-12 textcenter" style ="color:#0f7407;">
+			{% if nbNotif %}
+			  <b><a href="{% url 'notifications_news' %}">{% fontawesome_icon 'bell' %}  Vous avez {{nbNotif}} nouvelle{{ nbNotif|pluralize:",s" }} notification{{ nbNotif|pluralize:",s" }} depuis le {{request.user.date_notifications|date:"d/m/Y"}} à {{request.user.date_notifications|date:"G:i"}})</a></b>
+
+			{%else%}
+			  <b><a href="{% url 'notifications_news' %}">{% fontawesome_icon 'bell' %}  Notifications</a></b>
+			{%endif%}
+		  </div>
+		</div>
+
+		<hr>
+
+		<div class="row" >
+		  <div class="col-sm-12 textcenter">
+			  <b><a href="{% url 'blog:index' %}">{% fontawesome_icon 'book' %} Forum</a></b>
+		  </div>
+		</div>
+
+		<hr>
+		<div class="row" >
+		  <div class="col-sm-12 textcenter">
+			  <b><a href="{% url 'agora_general' %}">{% fontawesome_icon 'comments' %} Salon de discussion</a></b>
+		  </div>
+		</div>
+		<hr>
+		<div class="row" >
+		  <div class="col-sm-12 textcenter">
+			  <b><a href="{% url 'cal:agenda' %}">{% fontawesome_icon 'calendar' %} Agenda</a></b>
+		  </div>
+		</div>
+		<hr>
+
+	{% endif %}
+
+	</div>
+</div>
+
+
+{% endblock %}
+
+
+{% block content %}
+
+
+
+{% load cookielaw_tags %}
+{% cookielaw_banner %}
+
+{% endblock %}
+
+

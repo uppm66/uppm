@@ -12,7 +12,7 @@ from actstream.models import followers
 class Choix():
     type_annonce = ('0','Atelier philo'), ('1','Boite à idée'), \
                    ('2', 'Intendance, logistique'), ('3', 'Projets futurs'), \
-                   ('4',"Conférence mensuelle"),
+                   ('4',"Conférence mensuelle"), ('5',"RDV Mairie"),
     couleurs_annonces = {
        # 'Annonce':"#e0f7de", 'Administratif':"#dcc0de", 'Agenda':"#d4d1de", 'Entraide':"#cebacf",
        # 'Chantier':"#d1ecdc",'Jardinage':"#fcf6bd", 'Recette':"#d0f4de", 'Bricolage':"#fff2a0",
